@@ -1,0 +1,38 @@
+apply plugin: 'java-library'
+apply plugin: 'maven'
+def MAVEN_LOCAL_PATH='http://10.136.192.250:8083/repository/maven-releases/'
+def ARTIFACT_ID='mypermissionprocessor'
+def VERSION_NAME='1.0.0'
+def GROUP_ID='com.taikang'
+def ACCOUNT='admin'
+def PASSWORD='admin123'
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+
+    compile project(':mypermissionanno')
+
+    compile 'com.squareup:javapoet:1.11.1'
+    compile 'com.google.auto.service:auto-service:1.0-rc2'
+}
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
+
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+
+            repository(url: MAVEN_LOCAL_PATH) {
+                authentication(userName: ACCOUNT, password: PASSWORD)
+            }
+            pom.project{
+                pom.groupId = GROUP_ID
+                pom.artifactId = ARTIFACT_ID
+                pom.version = VERSION_NAME
+                pom.packaging = 'aar'
+            }
+        }
+    }
+}
